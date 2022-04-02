@@ -44,8 +44,9 @@ export const AuthProvider = ({ children }) => {
     setTimeout(() => resolve( {answer: false} ), 5000)
   })
 
-  const changeUserPassword = (newPassword) => new Promise ((resolve) => {
-    if(user.password !== newPassword){
+  const changeUserPassword = (oldPassword, newPassword) => new Promise ((resolve) => {
+    console.log(user.password, oldPassword)
+    if(user.password !== oldPassword){
       setTimeout(() => resolve( {answer: false} ), 5000)
     }
     const usersList = localStorage.getItem("usersList")

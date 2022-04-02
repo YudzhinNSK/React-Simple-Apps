@@ -11,6 +11,8 @@ export const ChangePassword = () => {
   const [isLoad, setIsLoad] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const [isModalSuccessOpen, setIsModalSuccessOpen] = useState(false)
+
   const [oldPassword, setOldPassword] = useState('')
   const [newPassword, setNewPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
@@ -60,10 +62,15 @@ export const ChangePassword = () => {
     }
 
     setIsLoad(true)
-    const result = await changeUserPassword(newPassword);
+    const result = await changeUserPassword(oldPassword, newPassword);
 
     if(result.answer) {
-      navigate("/changePassword", { replace: true })
+      setOldPassword('')
+      setNewPassword('')
+      setConfirmPassword('')
+      setIsModalSuccessOpen(true)
+      setIsLoad(false)
+      return
     }
 
     setIsOldPasswordCorrect(false)
@@ -184,6 +191,13 @@ export const ChangePassword = () => {
         header={"Please check old password"}
         content={"Entered data od old password is wrong, check it again."}
         close={() => setIsModalOpen(false)}
+      />
+
+      <SimpleModal
+        isOpen={isModalSuccessOpen}
+        header={"Success"}
+        content={"Your password is changed."}
+        close={() => setIsModalSuccessOpen(false)}
       />
     </div>
   )
