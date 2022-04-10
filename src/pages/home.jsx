@@ -1,25 +1,15 @@
 import React from "react";
+import { Title, Wrapper } from "./styles/style";
 
 export const HomePage = () => {
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-      }}>
-      <h1
-        style={{
-          marginBottom: "80px",
-          marginTop: "35px",
-        }}
-      >
+    <Wrapper>
+      <Title>
         Home page
-      </h1>
+      </Title>
       <div>
         Hello! Welcome to simple SPA React App!
       </div>
-    </div>
+    </Wrapper>
   );
 };

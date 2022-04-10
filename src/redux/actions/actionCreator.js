@@ -1,4 +1,4 @@
-import { IS_USER_LOGGED, LOG_IN, LOG_OUT } from "../constants";
+import { LOG_IN, LOG_OUT } from "../constants";
 
 export const logIn = (data) => {
   return {
@@ -11,9 +11,3 @@ export const logIn = (data) => {
 export const logOut = () => ({
   type: LOG_OUT
 })
-
-export const isUserLogged = () => {
-  return {
-    type: IS_USER_LOGGED
-  }
-}

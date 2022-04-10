@@ -1,5 +1,9 @@
-import {createStore, compose} from "redux";
+import {createStore, applyMiddleware, compose} from "redux";
+import createSagaMiddleware from 'redux-saga'
 import reducer from "./reducers";
+import rootSaga from "./sagas";
+
+const sagaMiddleware = createSagaMiddleware()
 
 const composeEnhancers =
   typeof window === 'object' &&
@@ -9,17 +13,16 @@ const composeEnhancers =
 const configureStore = preloadedState => createStore(
   reducer,
   preloadedState,
-  composeEnhancers(),
+  composeEnhancers(applyMiddleware(sagaMiddleware)),
 )
 
 const store = configureStore({
   url: "/",
   isUserLogged: localStorage.getItem("isUserLogged") ? JSON.parse(localStorage.getItem("isUserLogged")).isLogged : false,
-  userData: {
-    name: "Evgeny",
-    surname: "Gustomyasov"
-  },
+  user:{},
   news: {},
 });
+
+sagaMiddleware.run(rootSaga)
 
 export default store;
