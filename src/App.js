@@ -1,9 +1,15 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate, Navigate } from "react-router-dom";
 import Header from "./components/header";
 import { HomePage } from "./pages/home";
 import { LogIn } from "./pages/logIn";
 import { News } from "./pages/news";
 import { Profile } from "./pages/profile";
+import { useSelector } from "react-redux";
+
+function PrivateRoute({ children }) {
+  const { isUserLogged } = useSelector(store => store?.switchReducer || { isUserLogged: false } );
+  return isUserLogged ? children : <Navigate to="/login" />;
+}
 
 const App = () => {
   return (
@@ -13,7 +19,11 @@ const App = () => {
           <Route index element={<HomePage />} />
           <Route path="login" element={<LogIn />}/>
           <Route path="news" element={<News />}/>
-          <Route path="profile" element={<Profile />}/>
+          <Route path="profile" element={
+            <PrivateRoute>
+              <Profile />
+            </PrivateRoute>
+          }/>
         </Route>
       </Routes>
     </div>

@@ -1,43 +1,53 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { InputsContainer, Title, Wrapper } from "./styles/style";
-import { Button, IconButton, InputAdornment, TextField } from "@mui/material";
+import { Alert, Button, CircularProgress, IconButton, InputAdornment, Stack, TextField } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { logIn } from "../redux/actions/actionCreator";
+import { useNavigate } from "react-router-dom";
 
 export const LogIn =
   ({}) => {
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const { isUserLogged } = useSelector(store => store?.switchReducer || { isUserLogged: false });
+    const { logInError } = useSelector( store => store?.errors || '')
 
-    const dispatch = useDispatch()
+    const { load } = useSelector(store => store?.loading || false)
 
-    const [userName, setUserName] = useState('')
-    const [password, setPassword] = useState('')
+    const [userName, setUserName] = useState("");
+    const [password, setPassword] = useState("");
 
-    const [showPassword, setShowPassword] = useState(false)
+    const [showPassword, setShowPassword] = useState(false);
+
+    useEffect(() => {
+      if (isUserLogged) navigate("/profile");
+    }, [isUserLogged]);
+
 
     const handleClickShowPassword = () => setShowPassword(!showPassword);
     const handleMouseDownPassword = () => setShowPassword(!showPassword);
 
     const handleInputChange = (event) => {
       const id = event.target.id;
-      const value = event.target.value
+      const value = event.target.value;
 
-      if(id === "userName"){
-        setUserName(value)
+      if (id === "userName") {
+        setUserName(value);
       }
 
-      if(id === "password"){
-        setPassword(value)
+      if (id === "password") {
+        setPassword(value);
       }
-    }
+    };
 
     const handleSubmit = () => {
       const data = {
         userName: userName,
         password: password,
-      }
+      };
       dispatch(logIn(data))
-    }
+    };
 
 
     return (
@@ -49,7 +59,7 @@ export const LogIn =
           <TextField
             style={{
               marginTop: "15px",
-              minHeight: "80px"
+              minHeight: "80px",
             }}
             onChange={(event) => handleInputChange(event)}
             value={userName}
@@ -60,7 +70,7 @@ export const LogIn =
           <TextField
             style={{
               marginTop: "15px",
-              minHeight: "80px"
+              minHeight: "80px",
             }}
             value={password}
             onChange={(event) => handleInputChange(event)}
@@ -79,18 +89,24 @@ export const LogIn =
                     {showPassword ? <Visibility /> : <VisibilityOff />}
                   </IconButton>
                 </InputAdornment>
-              )
+              ),
             }}
           />
           <Button
             onClick={(event) => handleSubmit(event)}
           >
-            Log In
-            {/*{isLoad ? (*/}
-            {/*  <CircularProgress/>*/}
-            {/*) : 'Log In'}*/}
+            {load ? (
+              <CircularProgress/>
+            ) : 'Log In'}
           </Button>
         </InputsContainer>
+        <Stack sx={{ width: '100%' }} spacing={2}>
+          { !!logInError &&
+            (
+              <Alert severity="error">{logInError.toString()}</Alert>
+            )
+          }
+        </Stack>
       </Wrapper>
     );
   };

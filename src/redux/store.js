@@ -16,12 +16,7 @@ const configureStore = preloadedState => createStore(
   composeEnhancers(applyMiddleware(sagaMiddleware)),
 )
 
-const store = configureStore({
-  url: "/",
-  isUserLogged: localStorage.getItem("isUserLogged") ? JSON.parse(localStorage.getItem("isUserLogged")).isLogged : false,
-  user:{},
-  news: {},
-});
+const store = configureStore();
 
 sagaMiddleware.run(rootSaga)
 

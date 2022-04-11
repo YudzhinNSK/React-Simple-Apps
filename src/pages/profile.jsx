@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Title, Wrapper } from "./styles/style";
+import { InputsContainer, Title, Wrapper } from "./styles/style";
 import { useDispatch, useSelector } from "react-redux";
 import { switchReducer } from "../redux/reducers/logInLogOut";
 import { useNavigate } from "react-router-dom";
@@ -9,22 +9,8 @@ import { logOut } from "../redux/actions/actionCreator";
 export const Profile =
   ({}) => {
     const navigate = useNavigate()
-    const [ isUserLogged, setIsUserLogged ]= useState(false)
-    const [user, setUser] = useState(null)
-
-    const storeData = useSelector(store => store?.switchReducer || { isUserLogged: false } )
     const userData = useSelector(store => store?.switchReducer?.user || { } )
     const dispatch = useDispatch()
-
-    useEffect(() => {
-      console.log(storeData)
-      if(!storeData.isUserLogged) {
-        console.log("false")
-        navigate("/login");
-        return
-      }
-      setUser(userData)
-    },[])
 
     const handleLogOut = () => {
       dispatch(logOut())
@@ -36,11 +22,12 @@ export const Profile =
         <Title>
           Profile Page
         </Title>
-        <div>
+        <InputsContainer>
+          {`Hello ${userData.name} ${userData.surname}`}
           <Button onClick={() => handleLogOut()}>
             LogOut
           </Button>
-        </div>
+        </InputsContainer>
       </Wrapper>
     );
   };
